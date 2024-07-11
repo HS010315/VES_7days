@@ -4,7 +4,7 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 26
-  productGUID: 1cb3d2a2b88a0ca46ad49a2ce123844c
+  productGUID: 91e6b856015e9de46b11a3c8257883aa
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   AndroidEnableSustainedPerformanceMode: 0
@@ -645,7 +645,8 @@ PlayerSettings:
   webGLMemoryGeometricGrowthStep: 0.2
   webGLMemoryGeometricGrowthCap: 96
   webGLPowerPreference: 2
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    Standalone: __MICROSPLAT__
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend: {}
@@ -754,10 +755,10 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: 7dcaa4d5-4304-4f34-a13e-199fdabda469
+  cloudProjectId: 845ce217-b9a4-452c-b253-7e2b863627b3
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: VolcanicEruptionSimulator
+  projectName: VolcanicEruptionSimulator 2024-07-11_10-54-50
   organizationId: eniod
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
