@@ -2,17 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IEffectable : MonoBehaviour
+public interface IEffectable
 {
-    // Start is called before the first frame update
-    void Start()
+    public void EffectToPlayer()
     {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

@@ -24,6 +24,15 @@ public class Disaester : MonoBehaviour
     public List<float> eventTimes = new List<float>();
     private bool earthquakeTriggered = false;
     private bool disasterTriggered;
+    private float cooldownTime = 1f;
+    private float LavaCount = 0f;
+    public PlayerStateInfo playerStateInfo;
+    private PlayerState currentState;
+    public PlayerState CurrentState
+    {
+        get { return currentState; }
+        private set { currentState = value; }
+    }
 
 
     void Start()
@@ -43,17 +52,9 @@ public class Disaester : MonoBehaviour
             TriggerEarthquakeEvent();
             earthquakeTriggered = true;
         }
-        if (!disasterTriggered && days == 1 && hours == 20 && minutes == 0)
-        {
-            disasterTriggered = true;
-            DisaesterEvent();
-        }
-        if (!disasterTriggered && days >= 2 && days <= 3 && hours % 4 == 0 && minutes == 0)
-        {
-            disasterTriggered = true;
-            DisaesterEvent();
-        }
-        if (!disasterTriggered && days == 4 && hours == 12 && minutes == 0)
+        if (!disasterTriggered && (days == 1 && hours == 20 && minutes == 0 ||
+                                          (days >= 2 && days <= 3 && hours % 4 == 0 && minutes == 0) ||
+                                          (days == 4 && hours == 12 && minutes == 0)))
         {
             disasterTriggered = true;
             DisaesterEvent();
@@ -72,13 +73,18 @@ public class Disaester : MonoBehaviour
                 TriggerVolcanicEvent();
                 break;
         }
+        StartCoroutine(ResetDisasterTrigger());
     }
 
     void TriggerEarthquakeEvent()
     {
         // 지진 이벤트 로직
-        disasterTriggered = false;
+        if(currentState != PlayerState.Crouching)
+        {
+            playerStateInfo.TakeDamage(20);
+        }
         Debug.Log("Earthquake Event Triggered");
+        earthquakeTriggered = false;
     }
 
     void TriggerVolcanicEvent()
@@ -95,12 +101,21 @@ public class Disaester : MonoBehaviour
     }
     void TriggerLavaEvent()
     {
-        disasterTriggered = false;
+        LavaCount++;
+        if ((LavaCount >= 5))
+        {
+            //용암이 흘러오는 로직
+        }
         Debug.Log("Lava Event Triggered");
     }
     void TriggerVolcanicBombEvent()
     {
-        disasterTriggered = false;
+        //집 주변 랜덤한 위치에 화산탄 낙하
         Debug.Log("VolcanicBombEvent");
+    }
+    IEnumerator ResetDisasterTrigger()
+    {
+        yield return new WaitForSeconds(cooldownTime);
+        disasterTriggered = false;
     }
 }

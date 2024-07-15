@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public PlayerStateInfo playerStateInfo;
     Rigidbody rb;
     [Header("Rotate")]
     public float mouseSpeed;
@@ -14,6 +15,9 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed;
     float h;
     float v;
+    private bool isRunning = false;
+    private bool isCrouching = false;
+    private bool isMoving = false;
 
     void Start()
     {
@@ -21,8 +25,9 @@ public class PlayerController : MonoBehaviour
         Cursor.visible = false;
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
-
+        playerStateInfo = GetComponent<PlayerStateInfo>();
         cam = Camera.main;
+        playerStateInfo.ChangeState(PlayerState.Idle);  
     }
 
     void Update()
@@ -53,15 +58,69 @@ public class PlayerController : MonoBehaviour
         Vector3 moveDirection = transform.forward * v + transform.right * h;
         Vector3 velocity = moveDirection.normalized * moveSpeed;
 
-        rb.velocity = new Vector3(velocity.x, rb.velocity.y, velocity.z); 
+        rb.velocity = new Vector3(velocity.x, rb.velocity.y, velocity.z);
 
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (h != 0 || v != 0)
         {
-            moveSpeed *= 2;
+            if (!isMoving)
+            {
+                isMoving = true;
+                if (!isRunning)
+                {
+                    playerStateInfo.ChangeState(PlayerState.Walking);
+                }
+            }
         }
-        if (Input.GetKeyUp(KeyCode.LeftShift))
+        else
         {
+            if (isMoving)
+            {
+                isMoving = false;
+                if (!isRunning)
+                {
+                    playerStateInfo.ChangeState(PlayerState.Idle);
+                }
+            }
+        }
+
+        if (!isCrouching && Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            isRunning = true;
+            moveSpeed *= 2;
+            playerStateInfo.ChangeState(PlayerState.Running);
+        }
+        if (!isCrouching && isRunning && Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            isRunning = false;
             moveSpeed /= 2;
+            if (isMoving)
+            {
+                playerStateInfo.ChangeState(PlayerState.Walking);
+            }
+            else
+            {
+                playerStateInfo.ChangeState(PlayerState.Idle);
+            }
+        }
+
+        if (!isRunning && Input.GetKeyDown(KeyCode.C))
+        {
+            isCrouching = true;
+            moveSpeed /= 2;
+            playerStateInfo.ChangeState(PlayerState.Crouching);
+        }
+        if (!isRunning && isCrouching && Input.GetKeyUp(KeyCode.C))
+        {
+            isCrouching = false;
+            moveSpeed *= 2;
+            if (isMoving)
+            {
+                playerStateInfo.ChangeState(PlayerState.Walking);
+            }
+            else
+            {
+                playerStateInfo.ChangeState(PlayerState.Idle);
+            }
         }
     }
 }

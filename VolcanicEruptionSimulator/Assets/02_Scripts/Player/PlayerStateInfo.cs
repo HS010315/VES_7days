@@ -8,7 +8,7 @@ public enum PlayerState
     Running,
     Interacting,
     Sleeping,
-    Fainting,
+    Crouching,
     Dying
 }
 
@@ -23,14 +23,19 @@ public enum PlayInfo
 
 public class PlayerStateInfo : MonoBehaviour
 {
-    private int hp;
-    private int hunger;
-    private int fatigue;
-    private int contamination;
-    private int panic;
+    public int hp;
+    public int hunger;
+    public int fatigue;
+    public int contamination;
+    public int panic;
 
-    public PlayerState CurrentState { get; private set; }
-
+    private PlayerState currentState;
+    public PlayerState CurrentState
+    {
+        get { return currentState; }
+        private set { currentState = value; }
+    }
+    public Animator animator;
     public int Hp
     {
         get { return hp; }
@@ -40,7 +45,6 @@ public class PlayerStateInfo : MonoBehaviour
             if (hp == 0)
             {
                 CurrentState = PlayerState.Dying;
-                HandleDyingState();
             }
         }
     }
@@ -95,27 +99,67 @@ public class PlayerStateInfo : MonoBehaviour
         CurrentState = PlayerState.Idle;
     }
 
-    void Update()
+    public void ChangeState(PlayerState newState)
     {
-        // 예제 업데이트 로직
-        // 필요에 따라 플레이어 상태를 업데이트할 수 있음
+        currentState = newState;
+        UpdateAnimator(currentState);
     }
 
-    private void HandleDyingState()
+    public PlayerState GetCurrentState()
     {
-        Debug.Log("Player is Dying");
+        return currentState;
+    }
+
+
+    private void UpdateAnimator(PlayerState newState)
+    {
+        animator.SetBool("isIdle", false);
+        animator.SetBool("isWalking", false);
+        animator.SetBool("isRunning", false);
+        animator.SetBool("isInteracting", false);
+        animator.SetBool("isSleeping", false);
+        animator.SetBool("isCrouching", false);
+        animator.SetBool("isDying", false);
+
+        switch (newState)
+        {
+            case PlayerState.Walking:
+                animator.SetBool("isWalking", true);
+                break;
+            case PlayerState.Running:
+                animator.SetBool("isRunning", true);
+                break;
+            case PlayerState.Interacting:
+                animator.SetBool("isInteracting", true);
+                break;
+            case PlayerState.Sleeping:
+                animator.SetBool("isSleeping", true);
+                break;
+            case PlayerState.Crouching:
+                animator.SetBool("isCrouching", true);
+                break;
+            case PlayerState.Dying:
+                animator.SetBool("isDying", true);
+                break;
+            default:
+                animator.SetBool("isIdle", true);
+                break;
+        }
     }
 
     private void CheckPlayInfoValues()
     {
         if (Hunger >= 70 || Fatigue >= 70 || Contamination >= 70 || Panic >= 70)
         {
-            Debug.Log("One of the PlayInfo values is 70 or higher");
         }
 
         if (Hunger == 100 || Fatigue == 100 || Contamination == 100 || Panic == 100)
         {
-            Debug.Log("One of the PlayInfo values is 100");
         }
+    }
+    public void TakeDamage(int damage)
+    {
+        Hp -= damage;
+        Debug.Log("Player took " + damage + " damage. Current HP: " + Hp);
     }
 }
