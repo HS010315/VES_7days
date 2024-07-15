@@ -89,6 +89,7 @@ public class Disaester : MonoBehaviour
 
     void TriggerVolcanicEvent()
     {
+        //화산 폭발 클로즈업 카메라 및 UI 껐다 켜기
         int result = Random.Range(0, 10);
         if (result < 3)
         {
