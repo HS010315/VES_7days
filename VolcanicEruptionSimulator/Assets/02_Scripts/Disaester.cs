@@ -23,10 +23,13 @@ public class Disaester : MonoBehaviour
     public GameTimer elapsedTime;
     public List<float> eventTimes = new List<float>();
     private bool earthquakeTriggered = false;
+    private bool disasterTriggered;
+
 
     void Start()
     {
         eventTimes = new List<float> { 0, 4, 8, 12, 16, 20 };
+        disasterTriggered = false;
     }
 
     void Update()
@@ -40,9 +43,19 @@ public class Disaester : MonoBehaviour
             TriggerEarthquakeEvent();
             earthquakeTriggered = true;
         }
-
-        if (days >= 1 && hours >= 20 && minutes == 0 && hours % 4 == 0)
+        if (!disasterTriggered && days == 1 && hours == 20 && minutes == 0)
         {
+            disasterTriggered = true;
+            DisaesterEvent();
+        }
+        if (!disasterTriggered && days >= 2 && days <= 3 && hours % 4 == 0 && minutes == 0)
+        {
+            disasterTriggered = true;
+            DisaesterEvent();
+        }
+        if (!disasterTriggered && days == 4 && hours == 12 && minutes == 0)
+        {
+            disasterTriggered = true;
             DisaesterEvent();
         }
     }
@@ -64,6 +77,7 @@ public class Disaester : MonoBehaviour
     void TriggerEarthquakeEvent()
     {
         // 지진 이벤트 로직
+        disasterTriggered = false;
         Debug.Log("Earthquake Event Triggered");
     }
 
@@ -81,10 +95,12 @@ public class Disaester : MonoBehaviour
     }
     void TriggerLavaEvent()
     {
+        disasterTriggered = false;
         Debug.Log("Lava Event Triggered");
     }
     void TriggerVolcanicBombEvent()
     {
+        disasterTriggered = false;
         Debug.Log("VolcanicBombEvent");
     }
 }
