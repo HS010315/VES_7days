@@ -23,11 +23,11 @@ public enum PlayInfo
 
 public class PlayerStateInfo : MonoBehaviour
 {
-    public int hp;
-    public int hunger;
-    public int fatigue;
-    public int contamination;
-    public int panic;
+    public int hp;                  //체력
+    public int hunger;              //배고픔
+    public int fatigue;             //피로
+    public int contamination;       //오염
+    public int panic;               //공황
 
     private PlayerState currentState;
     public PlayerState CurrentState

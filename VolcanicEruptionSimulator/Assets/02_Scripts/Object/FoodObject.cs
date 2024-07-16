@@ -12,21 +12,55 @@ public class FoodObject : MonoBehaviour, IInteractable, IEffectable
     {
         if(this.gameObject.CompareTag("Food"))
         {
-            playerStateInfo.Hunger -= 40;
+            if(playerStateInfo.Hunger < 40)
+            {
+                playerStateInfo.Hunger = 0;
+            }
+            else
+            {
+                playerStateInfo.Hunger -= 40;
+            }
         }
         else if(this.gameObject.CompareTag("EmergencyFood"))
         {
-            playerStateInfo.hunger -= 20;
+            if (playerStateInfo.Hunger < 20)
+            {
+                playerStateInfo.Hunger = 0;
+            }
+            else
+            {
+                playerStateInfo.Hunger -= 20;
+            }
         }
         else if(this.gameObject.CompareTag("CleanWater"))
         {
-            playerStateInfo.Hunger -= 10;
+            if (playerStateInfo.Hunger < 10)
+            {
+                playerStateInfo.Hunger = 0;
+            }
+            else
+            {
+                playerStateInfo.Hunger -= 10;
+            }
         }
         else if(this.gameObject.CompareTag("Tea"))
         {
-            playerStateInfo.Hunger -= 5;
-            playerStateInfo.Panic -= 10;
-
+            if (playerStateInfo.Hunger < 5)
+            {
+                playerStateInfo.Hunger = 0;
+            }
+            else
+            {
+                playerStateInfo.Hunger -= 5;
+            }
+            if (playerStateInfo.Panic < 10)
+            {
+                playerStateInfo.Panic = 0;
+            }
+            else
+            {
+                playerStateInfo.Panic -= 10;
+            }
         }
     }
 }

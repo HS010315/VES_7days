@@ -10,7 +10,14 @@ public class FaJObject : MonoBehaviour, IInteractable, IEffectable
     }
     public void EffectToPlayer(PlayerStateInfo playerStateInfo)
     {
-        playerStateInfo.Hp += 20;
+        if(playerStateInfo.Hp > 80)
+        {
+            playerStateInfo.Hp = 100;
+        }
+        else
+        {
+            playerStateInfo.Hp += 20;
+        }
         //질병 없애는 로직
     }
 }

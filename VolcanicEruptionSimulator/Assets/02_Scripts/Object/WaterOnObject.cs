@@ -1,18 +1,41 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 
-public class WaterOnObject : MonoBehaviour
+public class WaterOnObject : MonoBehaviour, IInteractable
 {
-    // Start is called before the first frame update
+    public float maxWater = 100f;
+    public float currentWater = 0f;
+    private bool waterOn = false;
+    private GameTimer gameTimer;
+
     void Start()
     {
-        
+        gameTimer = FindObjectOfType<GameTimer>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Interact()
     {
-        
+        waterOn = !waterOn;
+        if (waterOn)
+        {
+            StartCoroutine(IncreaseWater());
+        }
+    }
+
+    private IEnumerator IncreaseWater()
+    {
+        while (waterOn && gameTimer != null && gameTimer.timerStarted)
+        {
+            float waterIncreasement = 1f;
+            currentWater += waterIncreasement * Time.deltaTime;
+            currentWater = Mathf.Clamp(currentWater, 0f, maxWater);
+
+            if (currentWater >= maxWater)
+            {
+                waterOn = false;
+                yield break; 
+            }
+            yield return null;
+        }
     }
 }

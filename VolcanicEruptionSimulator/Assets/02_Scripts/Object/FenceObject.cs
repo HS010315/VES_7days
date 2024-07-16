@@ -1,18 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
-public class FenceObject : MonoBehaviour
+public class FenceObject : MonoBehaviour , IInteractable
 {
-    // Start is called before the first frame update
-    void Start()
+    public GameObject makeFense;
+    public UnityEvent spendTime;
+    void Interact()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        makeFense.SetActive(true);
+        spendTime.Invoke();
+        this.gameObject.GetComponent<FenceObject>().enabled = false;
     }
 }

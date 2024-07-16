@@ -1,18 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class BedObject : MonoBehaviour
+using UnityEngine.Events;
+public class BedObject : MonoBehaviour ,IInteractable, IEffectable
 {
-    // Start is called before the first frame update
-    void Start()
+    public UnityEvent onSleep;
+    void Interact()
     {
-        
+        onSleep.Invoke();
     }
-
-    // Update is called once per frame
-    void Update()
+    void EffectToPlayer(PlayerStateInfo playerStateInfo)
     {
-        
+        if (playerStateInfo.Fatigue >= 80)
+        {
+            playerStateInfo.Fatigue -= 80;
+        }
+        else
+        {
+            playerStateInfo.Fatigue = 0;
+        }
     }
 }

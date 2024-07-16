@@ -15,6 +15,7 @@ public class GameTimer : MonoBehaviour
 
     private float timeScale = 1f;
 
+    private bool isSleeping = false;
     private void Start()
     {
         StartTimer();
@@ -31,7 +32,7 @@ public class GameTimer : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.M))
         {
-            SleepForHours(4);
+            SpendHours(4);
         }
     }
 
@@ -60,10 +61,14 @@ public class GameTimer : MonoBehaviour
         int totalHours = totalMinutes / 60;
         return totalHours / 24 + startDay;
     }
-    public void SleepForHours(int timePassed) // 원하는 시간/2를 대입
+    public void SpendHours(int timePassed) // 원하는 시간/2를 대입
     {
         if (timeScale == 1f)
         {
+            if(timePassed > 1)
+            {
+                isSleeping = true;
+            }
             float originalTimeScale = Time.timeScale; 
             Time.timeScale = 60f; 
 
@@ -82,6 +87,8 @@ public class GameTimer : MonoBehaviour
             totalTimePassed -= deltaTime;
 
             UpdateTimeText();
+
+            isSleeping = false;
 
             yield return null;
         }

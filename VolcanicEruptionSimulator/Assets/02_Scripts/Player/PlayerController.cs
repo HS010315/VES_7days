@@ -65,7 +65,7 @@ public class PlayerController : MonoBehaviour
             if (!isMoving)
             {
                 isMoving = true;
-                if (!isRunning)
+                if (!isRunning && !isCrouching)
                 {
                     playerStateInfo.ChangeState(PlayerState.Walking);
                 }
@@ -76,7 +76,7 @@ public class PlayerController : MonoBehaviour
             if (isMoving)
             {
                 isMoving = false;
-                if (!isRunning)
+                if (!isRunning && !isCrouching)
                 {
                     playerStateInfo.ChangeState(PlayerState.Idle);
                 }
@@ -111,7 +111,6 @@ public class PlayerController : MonoBehaviour
         }
         if (!isRunning && isCrouching && Input.GetKeyUp(KeyCode.C))
         {
-            isCrouching = false;
             moveSpeed *= 2;
             if (isMoving)
             {
@@ -121,6 +120,7 @@ public class PlayerController : MonoBehaviour
             {
                 playerStateInfo.ChangeState(PlayerState.Idle);
             }
+            isCrouching = false;
         }
     }
 }

@@ -258,7 +258,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5144755251539798727}
-  - component: {fileID: 5144755251547211013}
   m_Layer: 0
   m_Name: sedan-car-01
   m_TagString: Untagged
@@ -304,27 +303,6 @@ Transform:
   - {fileID: 5144755251539798731}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &5144755251547211013
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5144755251539965607}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: d1e985c0fb2658c4bb66c0dd53fe253c, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5144755251539965609
 GameObject:
   m_ObjectHideFlags: 0
