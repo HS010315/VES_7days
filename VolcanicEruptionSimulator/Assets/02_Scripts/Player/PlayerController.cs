@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     private bool isRunning = false;
     private bool isCrouching = false;
     private bool isMoving = false;
+    private bool inCar = false;
 
     void Start()
     {
@@ -33,7 +34,10 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         Rotate();
-        Move();
+        if (!inCar)
+        {
+            Move();
+        }
     }
 
     void Rotate()
@@ -122,5 +126,9 @@ public class PlayerController : MonoBehaviour
             }
             isCrouching = false;
         }
+    }
+    public void SetInCar(bool value)
+    {
+        inCar = value;
     }
 }

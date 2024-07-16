@@ -7,7 +7,7 @@ public class FenceObject : MonoBehaviour , IInteractable
 {
     public GameObject makeFense;
     public UnityEvent spendTime;
-    void Interact()
+    public void Interact()
     {
         makeFense.SetActive(true);
         spendTime.Invoke();

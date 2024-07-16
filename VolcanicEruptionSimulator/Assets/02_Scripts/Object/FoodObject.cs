@@ -2,17 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FoodObject : MonoBehaviour, IInteractable, IEffectable
+public class FoodObject : MonoBehaviour, IEffectable, IInteractable
 {
-    public void Interact()
-    {
-        Destroy(this.gameObject);
-    }
     public void EffectToPlayer(PlayerStateInfo playerStateInfo)
     {
-        if(this.gameObject.CompareTag("Food"))
+        if (this.gameObject.CompareTag("Food"))
         {
-            if(playerStateInfo.Hunger < 40)
+            if (playerStateInfo.Hunger < 40)
             {
                 playerStateInfo.Hunger = 0;
             }
@@ -20,8 +16,9 @@ public class FoodObject : MonoBehaviour, IInteractable, IEffectable
             {
                 playerStateInfo.Hunger -= 40;
             }
+            Debug.Log(playerStateInfo.Hunger + "¸ÀÀÖ´Ù");
         }
-        else if(this.gameObject.CompareTag("EmergencyFood"))
+        else if (this.gameObject.CompareTag("EmergencyFood"))
         {
             if (playerStateInfo.Hunger < 20)
             {
@@ -32,7 +29,7 @@ public class FoodObject : MonoBehaviour, IInteractable, IEffectable
                 playerStateInfo.Hunger -= 20;
             }
         }
-        else if(this.gameObject.CompareTag("CleanWater"))
+        else if (this.gameObject.CompareTag("CleanWater"))
         {
             if (playerStateInfo.Hunger < 10)
             {
@@ -43,7 +40,7 @@ public class FoodObject : MonoBehaviour, IInteractable, IEffectable
                 playerStateInfo.Hunger -= 10;
             }
         }
-        else if(this.gameObject.CompareTag("Tea"))
+        else if (this.gameObject.CompareTag("Tea"))
         {
             if (playerStateInfo.Hunger < 5)
             {
@@ -63,4 +60,8 @@ public class FoodObject : MonoBehaviour, IInteractable, IEffectable
             }
         }
     }
+    public void Interact()
+    {
+        Destroy(this.gameObject);
+    } 
 }

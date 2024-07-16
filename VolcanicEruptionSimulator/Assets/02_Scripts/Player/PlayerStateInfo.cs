@@ -9,6 +9,7 @@ public enum PlayerState
     Interacting,
     Sleeping,
     Crouching,
+    Sitting,
     Dying
 }
 
@@ -36,6 +37,8 @@ public class PlayerStateInfo : MonoBehaviour
         private set { currentState = value; }
     }
     public Animator animator;
+    private bool isSleeping = false;
+
     public int Hp
     {
         get { return hp; }
@@ -101,8 +104,11 @@ public class PlayerStateInfo : MonoBehaviour
 
     public void ChangeState(PlayerState newState)
     {
-        currentState = newState;
-        UpdateAnimator(currentState);
+        if (!isSleeping || newState == PlayerState.Dying) // 잠자는 중이 아니거나 Dying 상태로 변경할 때만 상태 변경 허용
+        {
+            currentState = newState;
+            UpdateAnimator(currentState);
+        }
     }
 
     public PlayerState GetCurrentState()
@@ -110,6 +116,14 @@ public class PlayerStateInfo : MonoBehaviour
         return currentState;
     }
 
+    public void WakeUp()
+    {
+        if (isSleeping)
+        {
+            isSleeping = false;
+            ChangeState(PlayerState.Idle);
+        }
+    }
 
     private void UpdateAnimator(PlayerState newState)
     {
@@ -119,6 +133,7 @@ public class PlayerStateInfo : MonoBehaviour
         animator.SetBool("isInteracting", false);
         animator.SetBool("isSleeping", false);
         animator.SetBool("isCrouching", false);
+        animator.SetBool("isSitting", false);
         animator.SetBool("isDying", false);
 
         switch (newState)
@@ -134,12 +149,16 @@ public class PlayerStateInfo : MonoBehaviour
                 break;
             case PlayerState.Sleeping:
                 animator.SetBool("isSleeping", true);
+                isSleeping = true; // 잠자는 상태로 변경 시 플래그 설정
                 break;
             case PlayerState.Crouching:
                 animator.SetBool("isCrouching", true);
                 break;
             case PlayerState.Dying:
                 animator.SetBool("isDying", true);
+                break;
+            case PlayerState.Sitting:
+                animator.SetBool("isSitting", true);
                 break;
             default:
                 animator.SetBool("isIdle", true);

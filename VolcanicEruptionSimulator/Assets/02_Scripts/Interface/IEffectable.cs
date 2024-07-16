@@ -4,8 +4,5 @@ using UnityEngine;
 
 public interface IEffectable
 {
-    public void EffectToPlayer(PlayerStateInfo playerStateInfo)
-    {
-
-    }
+    public void EffectToPlayer(PlayerStateInfo playerStateInfo);
 }

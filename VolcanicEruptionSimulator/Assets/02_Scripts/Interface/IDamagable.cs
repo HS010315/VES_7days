@@ -6,6 +6,5 @@ public interface IDamagable
 {
     public void DamageToPlayer(PlayerStateInfo playerStateInfo)
     {
-
     }
 }

@@ -8,6 +8,7 @@ public class InteractionController : MonoBehaviour
     public Text interactionText;
     public PlayerStateInfo playerStateInfo;
 
+    private IEffectable currentEffectable;
     private IInteractable currentInteractable;
 
     void Update()
@@ -23,22 +24,45 @@ public class InteractionController : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, interactionDistance))
         {
+            IEffectable effectable = hit.collider.GetComponent<IEffectable>();
             IInteractable interactable = hit.collider.GetComponent<IInteractable>();
-            if (interactable != null )
+
+            if (interactable != null)
             {
                 currentInteractable = interactable;
                 interactionText.gameObject.SetActive(true);
                 interactionText.text = "E를 눌러 상호작용";
-                return;
+            }
+            else
+            {
+                currentInteractable = null;
+                interactionText.gameObject.SetActive(false);
+            }
+
+            if (effectable != null)
+            {
+                currentEffectable = effectable;
+            }
+            else
+            {
+                currentEffectable = null;
             }
         }
-
-        currentInteractable = null;
-        interactionText.gameObject.SetActive(false);
+        else
+        {
+            currentInteractable = null;
+            currentEffectable = null;
+            interactionText.gameObject.SetActive(false);
+        }
     }
 
     void HandleInteraction()
     {
+        if (currentEffectable != null && Input.GetKeyDown(KeyCode.E))
+        {
+            currentEffectable.EffectToPlayer(playerStateInfo);
+        }
+
         if (currentInteractable != null && Input.GetKeyDown(KeyCode.E))
         {
             currentInteractable.Interact();

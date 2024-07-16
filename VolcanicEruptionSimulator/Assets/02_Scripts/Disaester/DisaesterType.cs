@@ -5,4 +5,9 @@ using UnityEngine;
 public class DisaesterType : IDamagable, IEffectable
 {
     public PlayerStateInfo playerStateInfo;
+
+    public void EffectToPlayer(PlayerStateInfo playerStateInfo)
+    {
+
+    }
 }

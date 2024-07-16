@@ -5,11 +5,11 @@ using UnityEngine.Events;
 public class BedObject : MonoBehaviour ,IInteractable, IEffectable
 {
     public UnityEvent onSleep;
-    void Interact()
+    public void Interact()
     {
         onSleep.Invoke();
     }
-    void EffectToPlayer(PlayerStateInfo playerStateInfo)
+    public void EffectToPlayer(PlayerStateInfo playerStateInfo)
     {
         if (playerStateInfo.Fatigue >= 80)
         {

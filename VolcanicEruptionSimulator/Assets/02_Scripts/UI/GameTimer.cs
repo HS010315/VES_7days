@@ -15,7 +15,8 @@ public class GameTimer : MonoBehaviour
 
     private float timeScale = 1f;
 
-    private bool isSleeping = false;
+    private PlayerStateInfo playerStateInfo;
+
     private void Start()
     {
         StartTimer();
@@ -67,7 +68,8 @@ public class GameTimer : MonoBehaviour
         {
             if(timePassed > 1)
             {
-                isSleeping = true;
+                PlayerStateInfo playerStateInfo = FindObjectOfType<PlayerStateInfo>();
+                playerStateInfo.ChangeState(PlayerState.Sleeping);
             }
             float originalTimeScale = Time.timeScale; 
             Time.timeScale = 60f; 
@@ -88,12 +90,11 @@ public class GameTimer : MonoBehaviour
 
             UpdateTimeText();
 
-            isSleeping = false;
-
             yield return null;
         }
-
         Time.timeScale = originalTimeScale;
+        PlayerStateInfo playerStateInfo = FindObjectOfType<PlayerStateInfo>();
+        playerStateInfo.WakeUp();
     }
     public void UpdateTimeText()
     {
