@@ -60,7 +60,7 @@ public class GameTimer : MonoBehaviour
         int totalHours = totalMinutes / 60;
         return totalHours / 24 + startDay;
     }
-    public void SleepForHours(int timePassed)
+    public void SleepForHours(int timePassed) // 원하는 시간/2를 대입
     {
         if (timeScale == 1f)
         {

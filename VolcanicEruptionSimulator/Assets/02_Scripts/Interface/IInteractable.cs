@@ -2,14 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ISwitchable
+public interface IInteractable
 {
-    void OpenDoor()
+    void Interact()
     { 
     
-    }
-    void CloseDoor()
-    {
-
     }
 }
