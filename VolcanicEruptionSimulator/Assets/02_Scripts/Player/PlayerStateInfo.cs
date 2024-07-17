@@ -37,8 +37,9 @@ public class PlayerStateInfo : MonoBehaviour
         private set { currentState = value; }
     }
     public Animator animator;
-    private bool isSleeping = false;
-
+    public bool isSleeping = false;
+    public PlayerController playerController;
+    public CameraFade cameraFade;
     public int Hp
     {
         get { return hp; }
@@ -95,10 +96,10 @@ public class PlayerStateInfo : MonoBehaviour
     void Start()
     {
         Hp = 100;
-        Hunger = 0;
-        Fatigue = 0;
+        Hunger = 50;
+        Fatigue = 50;
         Contamination = 0;
-        Panic = 0;
+        Panic = 20;
         CurrentState = PlayerState.Idle;
     }
 
@@ -120,8 +121,10 @@ public class PlayerStateInfo : MonoBehaviour
     {
         if (isSleeping)
         {
+            cameraFade.FadeIn(1f);
             isSleeping = false;
             ChangeState(PlayerState.Idle);
+            playerController.SetMoveable(true);
         }
     }
 

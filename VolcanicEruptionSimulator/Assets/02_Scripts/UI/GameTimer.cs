@@ -14,8 +14,7 @@ public class GameTimer : MonoBehaviour
     private int startDay = 1;
 
     private float timeScale = 1f;
-
-    private PlayerStateInfo playerStateInfo;
+    public CameraFade cameraFade;
 
     private void Start()
     {
@@ -35,6 +34,7 @@ public class GameTimer : MonoBehaviour
         {
             SpendHours(4);
         }
+
     }
 
     public void StartTimer()
@@ -62,8 +62,9 @@ public class GameTimer : MonoBehaviour
         int totalHours = totalMinutes / 60;
         return totalHours / 24 + startDay;
     }
-    public void SpendHours(int timePassed) // 원하는 시간/2를 대입
+    public void SpendHours(float timePassed) // 원하는 시간/2를 대입
     {
+        cameraFade.FadeOut(1f);
         if (timeScale == 1f)
         {
             if(timePassed > 1)
@@ -82,6 +83,8 @@ public class GameTimer : MonoBehaviour
 
     private IEnumerator CountDown(float totalTimePassed, float originalTimeScale)
     {
+        PlayerStateInfo playerStateInfo = FindObjectOfType<PlayerStateInfo>();
+
         while (totalTimePassed > 0)
         {
             float deltaTime = Time.deltaTime * Time.timeScale;
@@ -89,11 +92,14 @@ public class GameTimer : MonoBehaviour
             totalTimePassed -= deltaTime;
 
             UpdateTimeText();
+            if (playerStateInfo.isSleeping == false)
+            {
+                playerStateInfo.WakeUp();
+            }
 
             yield return null;
         }
         Time.timeScale = originalTimeScale;
-        PlayerStateInfo playerStateInfo = FindObjectOfType<PlayerStateInfo>();
         playerStateInfo.WakeUp();
     }
     public void UpdateTimeText()
