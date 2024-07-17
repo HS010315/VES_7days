@@ -13,10 +13,10 @@ public class PlayerUI : MonoBehaviour
     private void Start()
     {
         colors = new List<Color> {
-            new Color(0, 255, 0),
-            new Color(255, 150, 0),
-            new Color(150, 255, 0),
-            new Color(255, 0, 0)
+            new Color(0f, 1f, 0f),      // 초록색
+            new Color(1f, 0.588f, 0f),  // 주황색
+            new Color(0.588f, 1f, 0f),  // 연두색
+            new Color(1f, 0f, 0f)       // 빨간색
         };
     }
 
@@ -30,11 +30,11 @@ public class PlayerUI : MonoBehaviour
             sliders[3].value = playerStateInfo.Contamination / 100f;
             sliders[4].value = playerStateInfo.Panic / 100f;
 
-            texts[0].text = playerStateInfo.Hp.ToString();
-            texts[1].text = playerStateInfo.Fatigue.ToString();
-            texts[2].text = playerStateInfo.Hunger.ToString();
-            texts[3].text = playerStateInfo.Contamination.ToString();
-            texts[4].text = playerStateInfo.Panic.ToString();
+            texts[0].text = $"체력: {playerStateInfo.Hp}";
+            texts[1].text = $"피로도: {playerStateInfo.Fatigue}";
+            texts[2].text = $"배고픔: {playerStateInfo.Hunger}";
+            texts[3].text = $"오염도: {playerStateInfo.Contamination}";
+            texts[4].text = $"패닉: {playerStateInfo.Panic}";
 
             UpdateSliderColor(sliders[0], true); 
             for (int i = 1; i < sliders.Count; i++)
@@ -46,43 +46,18 @@ public class PlayerUI : MonoBehaviour
 
     private void UpdateSliderColor(Slider slider, bool reverse)
     {
+        float value = slider.value;
+
         if (!reverse)
-        {
-            if (slider.value > 0.6f && slider.value < 1f)
-            {
-                slider.fillRect.GetComponent<Image>().color = colors[0];
-            }
-            else if (slider.value > 0.3f && slider.value <= 0.6f)
-            {
-                slider.fillRect.GetComponent<Image>().color = colors[2];
-            }
-            else if (slider.value > 0 && slider.value <= 0.3f)
-            {
-                slider.fillRect.GetComponent<Image>().color = colors[1]; 
-            }
-            else if (slider.value == 1f)
-            {
-                slider.fillRect.GetComponent<Image>().color = colors[3]; 
-            }
-        }
+            value = 1 - value; 
+
+        if (value > 0.6f)
+            slider.fillRect.GetComponent<Image>().color = colors[0]; // 초록색
+        else if (value > 0.3f)
+            slider.fillRect.GetComponent<Image>().color = colors[2]; // 연두색
+        else if (value > 0f)
+            slider.fillRect.GetComponent<Image>().color = colors[1]; // 주황색
         else
-        {
-            if (slider.value > 0.6f && slider.value < 1f)
-            {
-                slider.fillRect.GetComponent<Image>().color = colors[3];
-            }
-            else if (slider.value > 0.3f && slider.value <= 0.6f)
-            {
-                slider.fillRect.GetComponent<Image>().color = colors[1]; 
-            }
-            else if (slider.value > 0 && slider.value <= 0.3f)
-            {
-                slider.fillRect.GetComponent<Image>().color = colors[2];
-            }
-            else if (slider.value == 1f)
-            {
-                slider.fillRect.GetComponent<Image>().color = colors[0]; 
-            }
-        }
+            slider.fillRect.GetComponent<Image>().color = colors[3]; // 빨간색
     }
 }

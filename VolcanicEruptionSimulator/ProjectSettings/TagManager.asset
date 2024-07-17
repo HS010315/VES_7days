@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Food
+  - CleanWater
+  - Tea
+  - EmergencyFood
   layers:
   - Default
   - TransparentFX
