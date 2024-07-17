@@ -7,18 +7,22 @@ public class WaterOnObject : MonoBehaviour, IInteractable
     public float currentWater = 0f;
     private bool waterOn = false;
     private GameTimer gameTimer;
-
+    private Disaester disaester;
     void Start()
     {
         gameTimer = FindObjectOfType<GameTimer>();
+        disaester = FindObjectOfType<Disaester>();
     }
 
     public void Interact()
     {
-        waterOn = !waterOn;
-        if (waterOn)
+        if(!disaester.firstTimeDisaester)
         {
-            StartCoroutine(IncreaseWater());
+            waterOn = !waterOn;
+            if (waterOn)
+            {
+                StartCoroutine(IncreaseWater());
+            }
         }
     }
 

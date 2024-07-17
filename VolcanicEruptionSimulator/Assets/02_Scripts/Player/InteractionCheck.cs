@@ -10,7 +10,7 @@ public class InteractionController : MonoBehaviour
 
     private IEffectable currentEffectable;
     private IInteractable currentInteractable;
-
+    public bool isDisabled;
     void Update()
     {
         DetectInteractable();
@@ -30,6 +30,10 @@ public class InteractionController : MonoBehaviour
             if (interactable != null)
             {
                 currentInteractable = interactable;
+                if(isDisabled)
+                {
+                    interactionText.color = Color.red;
+                }
                 interactionText.gameObject.SetActive(true);
                 interactionText.text = "E를 눌러 상호작용";
             }

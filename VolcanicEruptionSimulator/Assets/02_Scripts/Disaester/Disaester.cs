@@ -23,6 +23,7 @@ public class Disaester : MonoBehaviour
     public GameTimer elapsedTime;
     public List<float> eventTimes = new List<float>();
     private bool earthquakeTriggered = false;
+    public bool firstTimeDisaester = false;
     private bool disasterTriggered;
     private float cooldownTime = 1f;
     private float LavaCount = 0f;
@@ -56,6 +57,7 @@ public class Disaester : MonoBehaviour
                                           (days >= 2 && days <= 3 && hours % 4 == 0 && minutes == 0) ||
                                           (days == 4 && hours == 12 && minutes == 0)))
         {
+            firstTimeDisaester = true;
             disasterTriggered = true;
             DisaesterEvent();
         }

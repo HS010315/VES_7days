@@ -12,8 +12,8 @@ public class BedObject : MonoBehaviour, IInteractable, IEffectable
     {
         if (!playerStateInfo.isSleeping)
         {
-            playerController.SetMoveable(false);
             onSleep.Invoke();
+            playerController.SetMoveable(false);
         }
         else
         {

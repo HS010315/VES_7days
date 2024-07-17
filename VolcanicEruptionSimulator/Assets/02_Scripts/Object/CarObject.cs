@@ -34,7 +34,7 @@ public class CarObject : MonoBehaviour, IInteractable
         PlayerController playerController = driver.GetComponent<PlayerController>();
         if (playerController != null)
         {
-            playerController.SetMoveable(true);
+            playerController.SetMoveable(false);
         }
     }
 
@@ -46,7 +46,7 @@ public class CarObject : MonoBehaviour, IInteractable
         PlayerController playerController = driver.GetComponent<PlayerController>();
         if (playerController != null)
         {
-            playerController.SetMoveable(false);
+            playerController.SetMoveable(true);
         }
     }
 }

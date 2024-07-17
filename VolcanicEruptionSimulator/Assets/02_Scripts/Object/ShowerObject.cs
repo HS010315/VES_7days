@@ -24,5 +24,4 @@ public class ShowerObject : MonoBehaviour, IInteractable , IEffectable
         water.currentWater -= 25;
         spendTime.Invoke();
     }
-
 }

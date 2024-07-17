@@ -7,15 +7,14 @@ public class GameTimer : MonoBehaviour
 {
     public Text timeText;
     public Text dateText;
-
-    private float gameTime = 60f;
     private float elapsedTime = 0f;
     public bool timerStarted = false;
     private int startDay = 1;
-
     private float timeScale = 1f;
     public CameraFade cameraFade;
-
+    public PlayerStateInfo playerStateInfo;
+    public PlayerController playerController;
+    private bool isChangeInfo = false;
     private void Start()
     {
         StartTimer();
@@ -26,8 +25,6 @@ public class GameTimer : MonoBehaviour
         if (!timerStarted)
             return;
 
-        elapsedTime += Time.deltaTime * gameTime * timeScale;
-
         UpdateTimeText();
 
         if(Input.GetKeyDown(KeyCode.M))
@@ -36,7 +33,6 @@ public class GameTimer : MonoBehaviour
         }
 
     }
-
     public void StartTimer()
     {
         elapsedTime = (8 * 60) * 60;
@@ -62,20 +58,21 @@ public class GameTimer : MonoBehaviour
         int totalHours = totalMinutes / 60;
         return totalHours / 24 + startDay;
     }
-    public void SpendHours(float timePassed) // 원하는 시간/2를 대입
+    public void SpendHours(int timePassed) // 원하는 시간/2를 대입
     {
-        cameraFade.FadeOut(1f);
+        playerController.SetMoveable(false);
         if (timeScale == 1f)
         {
-            if(timePassed > 1)
+            if(timePassed > 6)
             {
                 PlayerStateInfo playerStateInfo = FindObjectOfType<PlayerStateInfo>();
                 playerStateInfo.ChangeState(PlayerState.Sleeping);
+                cameraFade.FadeOut(1f);
             }
             float originalTimeScale = Time.timeScale; 
             Time.timeScale = 60f; 
 
-            float totalTimePassed = timePassed * 3600;
+            float totalTimePassed = timePassed * 1800;
 
             StartCoroutine(CountDown(totalTimePassed, originalTimeScale));
         }
@@ -92,15 +89,15 @@ public class GameTimer : MonoBehaviour
             totalTimePassed -= deltaTime;
 
             UpdateTimeText();
-            if (playerStateInfo.isSleeping == false)
-            {
-                playerStateInfo.WakeUp();
-            }
 
             yield return null;
         }
         Time.timeScale = originalTimeScale;
-        playerStateInfo.WakeUp();
+        if (playerStateInfo.isSleeping)
+        {
+            playerStateInfo.WakeUp();
+        }
+        playerController.SetMoveable(true);
     }
     public void UpdateTimeText()
     {
@@ -110,17 +107,32 @@ public class GameTimer : MonoBehaviour
 
         int hours = totalHours % 24;
         int minutes = totalMinutes % 60;
-
+        int textMinutes = minutes;
         if (minutes < 30)
         {
-            minutes = 0;
+            textMinutes = 0;
+            isChangeInfo = false;
+        }
+        else if (minutes >= 30 && !isChangeInfo)
+        {
+            UpdatePlayInfo();
+            isChangeInfo = true;
+            textMinutes = 30;
         }
         else
         {
-            minutes = 30;
+            textMinutes = 30;
         }
 
-        timeText.text = string.Format("{0:D2}:{1:D2}", hours, minutes);
+        timeText.text = string.Format("{0:D2}:{1:D2}", hours, textMinutes);
         dateText.text = string.Format("Day {0}", days);
+    }
+    private void UpdatePlayInfo()
+    {
+        playerStateInfo.Hunger += Mathf.RoundToInt(5);
+        if (!playerStateInfo.isSleeping)
+        {
+            playerStateInfo.Fatigue += Mathf.RoundToInt(5);
+        }
     }
 }

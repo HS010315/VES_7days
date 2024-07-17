@@ -5,12 +5,18 @@ using UnityEngine.Events;
 
 public class FenceObject : MonoBehaviour , IInteractable
 {
-    public GameObject makeFense;
+    public MeshRenderer makeFense;
     public UnityEvent spendTime;
+    public MonoBehaviour myScript;
+    public GameObject guideFense;
     public void Interact()
     {
-        makeFense.SetActive(true);
+        Destroy(guideFense);
+        makeFense.enabled = true;
         spendTime.Invoke();
-        this.gameObject.GetComponent<FenceObject>().enabled = false;
+        if (myScript != null)
+        {
+            Destroy(myScript);
+        }
     }
 }
