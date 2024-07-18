@@ -4,15 +4,22 @@ using UnityEngine;
 
 public class VolcanicBomb : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public PlayerStateInfo playerStateInfo;
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        
+        playerStateInfo = FindObjectOfType<PlayerStateInfo>();
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.CompareTag("Player"))
+        {
+            playerStateInfo.Hp = 0;
+            Destroy(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 }
