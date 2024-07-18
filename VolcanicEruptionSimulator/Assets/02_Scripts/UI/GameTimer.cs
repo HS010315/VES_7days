@@ -25,11 +25,12 @@ public class GameTimer : MonoBehaviour
         if (!timerStarted)
             return;
 
+        elapsedTime += Time.deltaTime * timeScale * 60;
         UpdateTimeText();
 
         if(Input.GetKeyDown(KeyCode.M))
         {
-            SpendHours(4);
+            SpendHours(2);
         }
 
     }
@@ -63,16 +64,16 @@ public class GameTimer : MonoBehaviour
         playerController.SetMoveable(false);
         if (timeScale == 1f)
         {
-            if(timePassed > 6)
+            if(timePassed >= 4)
             {
                 PlayerStateInfo playerStateInfo = FindObjectOfType<PlayerStateInfo>();
                 playerStateInfo.ChangeState(PlayerState.Sleeping);
                 cameraFade.FadeOut(1f);
             }
             float originalTimeScale = Time.timeScale; 
-            Time.timeScale = 60f; 
+            Time.timeScale = 60; 
 
-            float totalTimePassed = timePassed * 1800;
+            float totalTimePassed = timePassed * 900;
 
             StartCoroutine(CountDown(totalTimePassed, originalTimeScale));
         }
@@ -133,6 +134,14 @@ public class GameTimer : MonoBehaviour
         if (!playerStateInfo.isSleeping)
         {
             playerStateInfo.Fatigue += Mathf.RoundToInt(5);
+        }
+        if(playerStateInfo.Hunger == 100)
+        {
+            playerStateInfo.Hp -= Mathf.RoundToInt(3);
+        }
+        if(playerStateInfo.Contamination == 100)
+        {
+            playerStateInfo.Hp -= Mathf.RoundToInt(5);
         }
     }
 }

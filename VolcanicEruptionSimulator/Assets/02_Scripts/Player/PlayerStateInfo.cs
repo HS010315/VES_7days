@@ -39,6 +39,7 @@ public class PlayerStateInfo : MonoBehaviour
     public Animator animator;
     public bool isSleeping = false;
     public PlayerController playerController;
+    public GameTimer gameTimer;
     public CameraFade cameraFade;
     public int Hp
     {
@@ -171,12 +172,16 @@ public class PlayerStateInfo : MonoBehaviour
 
     private void CheckPlayInfoValues()
     {
-        if (Hunger >= 70 || Fatigue >= 70 || Contamination >= 70 || Panic >= 70)
+        if (Fatigue == 100)
         {
+            Fatigue = 0;
+            gameTimer.SpendHours(16);
+            Hp -= 10;
         }
-
-        if (Hunger == 100 || Fatigue == 100 || Contamination == 100 || Panic == 100)
+        else if(Panic == 100)
         {
+            gameTimer.SpendHours(4);
+            Hp -= 20;
         }
     }
     public void TakeDamage(int damage)

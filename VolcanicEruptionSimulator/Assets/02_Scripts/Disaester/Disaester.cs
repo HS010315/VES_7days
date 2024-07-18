@@ -87,6 +87,7 @@ public class Disaester : MonoBehaviour
         }
         Debug.Log("Earthquake Event Triggered");
         earthquakeTriggered = false;
+        playerStateInfo.Panic += 20;
     }
 
     void TriggerVolcanicEvent()
@@ -110,11 +111,13 @@ public class Disaester : MonoBehaviour
             //용암이 흘러오는 로직
         }
         Debug.Log("Lava Event Triggered");
+        playerStateInfo.Panic += 20;
     }
     void TriggerVolcanicBombEvent()
     {
         //집 주변 랜덤한 위치에 화산탄 낙하
         Debug.Log("VolcanicBombEvent");
+        playerStateInfo.Panic += 20;
     }
     IEnumerator ResetDisasterTrigger()
     {

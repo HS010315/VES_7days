@@ -8,6 +8,7 @@ public class WaterOnObject : MonoBehaviour, IInteractable
     private bool waterOn = false;
     private GameTimer gameTimer;
     private Disaester disaester;
+    public GameObject waterObject;
     void Start()
     {
         gameTimer = FindObjectOfType<GameTimer>();
@@ -21,6 +22,7 @@ public class WaterOnObject : MonoBehaviour, IInteractable
             waterOn = !waterOn;
             if (waterOn)
             {
+                waterObject.SetActive(true);
                 StartCoroutine(IncreaseWater());
             }
         }
@@ -34,6 +36,8 @@ public class WaterOnObject : MonoBehaviour, IInteractable
             currentWater += waterIncreasement * Time.deltaTime;
             currentWater = Mathf.Clamp(currentWater, 0f, maxWater);
 
+            UpdateWaterObjectScale();
+
             if (currentWater >= maxWater)
             {
                 waterOn = false;
@@ -41,5 +45,11 @@ public class WaterOnObject : MonoBehaviour, IInteractable
             }
             yield return null;
         }
+    }
+    public void UpdateWaterObjectScale()
+    {
+        float newYScale = Mathf.Lerp(1f, 13f, currentWater / maxWater);
+        Vector3 newScale = new Vector3(waterObject.transform.localScale.x, newYScale, waterObject.transform.localScale.z);
+        waterObject.transform.localScale = newScale;
     }
 }
