@@ -9,6 +9,8 @@ public class PlayerUI : MonoBehaviour
     public List<Slider> sliders;
     public List<Text> texts;
     private List<Color> colors;
+    public GameObject gameOver;
+    public GameObject restartButton;
 
     private void Start()
     {
@@ -41,6 +43,11 @@ public class PlayerUI : MonoBehaviour
             {
                 UpdateSliderColor(sliders[i], false); 
             }
+        }
+        if (playerStateInfo.CurrentState == PlayerState.Dying || playerStateInfo.Hp <= 0)
+        {
+            gameOver.SetActive(true);
+            restartButton.SetActive(true);
         }
     }
 

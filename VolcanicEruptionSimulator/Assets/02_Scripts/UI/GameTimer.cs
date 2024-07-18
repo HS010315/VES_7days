@@ -2,12 +2,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class GameTimer : MonoBehaviour
 {
     public Text timeText;
     public Text dateText;
-    private float elapsedTime = 0f;
+    public float elapsedTime = 0f;
     public bool timerStarted = false;
     private int startDay = 1;
     private float timeScale = 1f;
@@ -15,6 +16,8 @@ public class GameTimer : MonoBehaviour
     public PlayerStateInfo playerStateInfo;
     public PlayerController playerController;
     private bool isChangeInfo = false;
+    public Coroutine countdownCoroutine;
+
     private void Start()
     {
         StartTimer();
@@ -22,18 +25,24 @@ public class GameTimer : MonoBehaviour
 
     void Update()
     {
-        if (!timerStarted)
+        if (!timerStarted || playerStateInfo.Hp <= 0)
             return;
 
         elapsedTime += Time.deltaTime * timeScale * 60;
         UpdateTimeText();
 
-        if(Input.GetKeyDown(KeyCode.M))
+        if (Input.GetKeyDown(KeyCode.M))
         {
             SpendHours(2);
         }
 
+        if (playerStateInfo.CurrentState == PlayerState.Dying && countdownCoroutine != null || playerStateInfo.Hp <= 0 && countdownCoroutine != null)
+        {
+            StopCoroutine(countdownCoroutine);
+            countdownCoroutine = null;
+        }
     }
+
     public void StartTimer()
     {
         elapsedTime = (8 * 60) * 60;
@@ -59,32 +68,40 @@ public class GameTimer : MonoBehaviour
         int totalHours = totalMinutes / 60;
         return totalHours / 24 + startDay;
     }
-    public void SpendHours(int timePassed) // 원하는 시간/2를 대입
+
+    public void SpendHours(int timePassed)
     {
+        if (playerStateInfo.CurrentState == PlayerState.Dying)
+            return;
         playerController.SetMoveable(false);
         if (timeScale == 1f)
         {
-            if(timePassed >= 4)
+            if (timePassed >= 4)
             {
                 PlayerStateInfo playerStateInfo = FindObjectOfType<PlayerStateInfo>();
                 playerStateInfo.ChangeState(PlayerState.Sleeping);
                 cameraFade.FadeOut(1f);
+                timeText.color = Color.white;
+                dateText.color = Color.white;
             }
-            float originalTimeScale = Time.timeScale; 
-            Time.timeScale = 60; 
+            float originalTimeScale = Time.timeScale;
+            Time.timeScale = 60;
 
             float totalTimePassed = timePassed * 900;
 
-            StartCoroutine(CountDown(totalTimePassed, originalTimeScale));
+            countdownCoroutine = StartCoroutine(CountDown(totalTimePassed, originalTimeScale));
         }
     }
 
     private IEnumerator CountDown(float totalTimePassed, float originalTimeScale)
     {
-        PlayerStateInfo playerStateInfo = FindObjectOfType<PlayerStateInfo>();
-
         while (totalTimePassed > 0)
         {
+            if (playerStateInfo.CurrentState == PlayerState.Dying || playerStateInfo.Hp <= 0)
+            {
+                yield break;
+            }
+
             float deltaTime = Time.deltaTime * Time.timeScale;
             elapsedTime += deltaTime;
             totalTimePassed -= deltaTime;
@@ -93,13 +110,18 @@ public class GameTimer : MonoBehaviour
 
             yield return null;
         }
+
         Time.timeScale = originalTimeScale;
         if (playerStateInfo.isSleeping)
         {
             playerStateInfo.WakeUp();
+            cameraFade.FadeIn(1f);
+            timeText.color = Color.black;
+            dateText.color = Color.black;
         }
         playerController.SetMoveable(true);
     }
+
     public void UpdateTimeText()
     {
         int totalMinutes = Mathf.FloorToInt(elapsedTime / 60);
@@ -128,6 +150,7 @@ public class GameTimer : MonoBehaviour
         timeText.text = string.Format("{0:D2}:{1:D2}", hours, textMinutes);
         dateText.text = string.Format("Day {0}", days);
     }
+
     private void UpdatePlayInfo()
     {
         playerStateInfo.Hunger += Mathf.RoundToInt(5);
@@ -135,13 +158,22 @@ public class GameTimer : MonoBehaviour
         {
             playerStateInfo.Fatigue += Mathf.RoundToInt(5);
         }
-        if(playerStateInfo.Hunger == 100)
+        if (playerStateInfo.Hunger == 100)
         {
             playerStateInfo.Hp -= Mathf.RoundToInt(3);
         }
-        if(playerStateInfo.Contamination == 100)
+        if (playerStateInfo.Contamination == 100)
         {
             playerStateInfo.Hp -= Mathf.RoundToInt(5);
         }
+    }
+    public void RestartGame()
+    {
+        elapsedTime = 0f;
+        timerStarted = false;
+        countdownCoroutine = null;
+
+        Scene currentScene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(currentScene.name);
     }
 }

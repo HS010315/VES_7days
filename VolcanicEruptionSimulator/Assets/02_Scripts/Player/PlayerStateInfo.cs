@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum PlayerState
@@ -10,6 +11,7 @@ public enum PlayerState
     Sleeping,
     Crouching,
     Sitting,
+    Falling,
     Dying
 }
 
@@ -40,7 +42,6 @@ public class PlayerStateInfo : MonoBehaviour
     public bool isSleeping = false;
     public PlayerController playerController;
     public GameTimer gameTimer;
-    public CameraFade cameraFade;
     public int Hp
     {
         get { return hp; }
@@ -99,7 +100,7 @@ public class PlayerStateInfo : MonoBehaviour
         Hp = 100;
         Hunger = 50;
         Fatigue = 50;
-        Contamination = 0;
+        Contamination = 20;
         Panic = 20;
         CurrentState = PlayerState.Idle;
     }
@@ -122,7 +123,6 @@ public class PlayerStateInfo : MonoBehaviour
     {
         if (isSleeping)
         {
-            cameraFade.FadeIn(1f);
             isSleeping = false;
             ChangeState(PlayerState.Idle);
             playerController.SetMoveable(true);
@@ -138,6 +138,7 @@ public class PlayerStateInfo : MonoBehaviour
         animator.SetBool("isSleeping", false);
         animator.SetBool("isCrouching", false);
         animator.SetBool("isSitting", false);
+        animator.SetBool("isFalling", false);
         animator.SetBool("isDying", false);
 
         switch (newState)
@@ -164,6 +165,9 @@ public class PlayerStateInfo : MonoBehaviour
             case PlayerState.Sitting:
                 animator.SetBool("isSitting", true);
                 break;
+            case PlayerState.Falling:
+                animator.SetBool("isFalling", true);
+                break;
             default:
                 animator.SetBool("isIdle", true);
                 break;
@@ -182,6 +186,10 @@ public class PlayerStateInfo : MonoBehaviour
         {
             gameTimer.SpendHours(4);
             Hp -= 20;
+        }
+        else if(Hp == 0)
+        {
+            ChangeState(PlayerState.Dying);
         }
     }
     public void TakeDamage(int damage)

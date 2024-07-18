@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     private bool isCrouching = false;
     private bool isMoving = false;
     private bool isMoveable = true;
+    private bool isDie = false;
 
     void Start()
     {
@@ -33,10 +34,19 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        Rotate();
-        if (isMoveable)
+        if(playerStateInfo.Hp <= 0)
         {
-            Move();
+            isDie = true;
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
+        if(!isDie)
+        {
+            Rotate();
+            if (isMoveable)
+            {
+                Move();
+            }
         }
     }
 

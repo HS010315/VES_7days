@@ -4,7 +4,5 @@ using UnityEngine;
 
 public interface IDamagable
 {
-    public void DamageToPlayer(PlayerStateInfo playerStateInfo)
-    {
-    }
+    public void DamageToPlayer(PlayerStateInfo playerStateInfo);
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 using Random = UnityEngine.Random;
@@ -27,6 +28,7 @@ public class Disaester : MonoBehaviour
     private bool disasterTriggered;
     private float cooldownTime = 1f;
     private float LavaCount = 0f;
+    public DisaesterEffect disaesterEffect;
     public PlayerStateInfo playerStateInfo;
     private PlayerState currentState;
     public PlayerState CurrentState
@@ -47,6 +49,11 @@ public class Disaester : MonoBehaviour
         int hours = elapsedTime.GetHours();  
         int minutes = elapsedTime.GetMinutes(); 
         int days = elapsedTime.GetDays();   
+
+        if(playerStateInfo.Hp<=0)
+        {
+            return;
+        }
 
         if (!earthquakeTriggered && days == 1 && hours == 8 && minutes == 0)
         {
@@ -80,14 +87,11 @@ public class Disaester : MonoBehaviour
 
     void TriggerEarthquakeEvent()
     {
-        // 지진 이벤트 로직
-        if(currentState != PlayerState.Crouching)
-        {
-            playerStateInfo.TakeDamage(20);
-        }
+        disaesterEffect.DisaesterEvent(DisaesterList.Earthquake);
+        disaesterEffect.EffectToPlayer(playerStateInfo);
+        disaesterEffect.DamageToPlayer(playerStateInfo);
         Debug.Log("Earthquake Event Triggered");
         earthquakeTriggered = false;
-        playerStateInfo.Panic += 20;
     }
 
     void TriggerVolcanicEvent()
@@ -108,16 +112,18 @@ public class Disaester : MonoBehaviour
         LavaCount++;
         if ((LavaCount >= 5))
         {
-            //용암이 흘러오는 로직
+            disaesterEffect.DisaesterEvent(DisaesterList.Lava);
+            disaesterEffect.EffectToPlayer(playerStateInfo);
+            disaesterEffect.DamageToPlayer(playerStateInfo);
         }
         Debug.Log("Lava Event Triggered");
-        playerStateInfo.Panic += 20;
     }
     void TriggerVolcanicBombEvent()
     {
-        //집 주변 랜덤한 위치에 화산탄 낙하
+        disaesterEffect.DisaesterEvent(DisaesterList.VolcanicBomb);
+        disaesterEffect.EffectToPlayer(playerStateInfo);
+        disaesterEffect.DamageToPlayer(playerStateInfo);
         Debug.Log("VolcanicBombEvent");
-        playerStateInfo.Panic += 20;
     }
     IEnumerator ResetDisasterTrigger()
     {
