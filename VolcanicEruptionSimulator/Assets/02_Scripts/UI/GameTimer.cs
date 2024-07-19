@@ -17,6 +17,7 @@ public class GameTimer : MonoBehaviour
     public PlayerController playerController;
     private bool isChangeInfo = false;
     public Coroutine countdownCoroutine;
+    public UnityEvent gameClear;
 
     private void Start()
     {
@@ -90,6 +91,13 @@ public class GameTimer : MonoBehaviour
             float totalTimePassed = timePassed * 900;
 
             countdownCoroutine = StartCoroutine(CountDown(totalTimePassed, originalTimeScale));
+        }
+        int hours = GetHours();
+        int minutes = GetMinutes();
+        int days = GetDays();
+        if (days == 4 && hours == 16 && minutes == 0)
+        {
+            gameClear.Invoke();
         }
     }
 

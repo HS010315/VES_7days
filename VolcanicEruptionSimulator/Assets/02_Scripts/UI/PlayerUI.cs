@@ -6,11 +6,13 @@ using UnityEngine.UI;
 public class PlayerUI : MonoBehaviour
 {
     public PlayerStateInfo playerStateInfo;
+    public PlayerController playerController;
     public List<Slider> sliders;
     public List<Text> texts;
     private List<Color> colors;
     public GameObject gameOver;
     public GameObject restartButton;
+    public GameObject gameClear;
 
     private void Start()
     {
@@ -66,5 +68,11 @@ public class PlayerUI : MonoBehaviour
             slider.fillRect.GetComponent<Image>().color = colors[1]; // 주황색
         else
             slider.fillRect.GetComponent<Image>().color = colors[3]; // 빨간색
+    }
+    public void GameClear()
+    {
+        gameClear.SetActive(true);
+        restartButton.SetActive(true);
+        playerController.SetMoveable(false);
     }
 }

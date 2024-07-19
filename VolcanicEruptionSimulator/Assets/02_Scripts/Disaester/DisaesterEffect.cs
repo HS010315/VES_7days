@@ -123,8 +123,6 @@ public class DisaesterEffect : MonoBehaviour, IEffectable, IDamagable
                 {
                     Debug.LogWarning("Rigidbody not found on volcanicBombPrefab!");
                 }
-
-                Destroy(bomb, 10f);
                 yield return new WaitForSeconds(Random.Range(0f, 1f));
             }
             yield return new WaitForSeconds(Random.Range(0f, 1f));

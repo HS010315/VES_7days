@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Events;
 
 
 public class ReStartScene : MonoBehaviour
@@ -8,8 +7,11 @@ public class ReStartScene : MonoBehaviour
     public GameTimer gameTimer;
     public void RestartScene()
     {
-        RestartGame();
-        SceneManager.LoadScene(0);
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
     public void RestartGame()
     {

@@ -19,7 +19,7 @@ public class VolcanicBomb : MonoBehaviour
         }
         else
         {
-            Destroy(gameObject);
+            Destroy(gameObject,10f);
         }
     }
 }
