@@ -186,6 +186,7 @@ public class PlayerStateInfo : MonoBehaviour
         {
             gameTimer.SpendHours(4);
             Hp -= 20;
+            Panic -= 30;
         }
         else if(Hp == 0)
         {

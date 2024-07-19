@@ -23,6 +23,7 @@ public class BedObject : MonoBehaviour, IInteractable, IEffectable
 
     public void EffectToPlayer(PlayerStateInfo playerStateInfo)
     {
+        playerStateInfo.Panic -= 30;
         if (playerStateInfo.Fatigue >= 80)
         {
             playerStateInfo.Fatigue -= 80;
